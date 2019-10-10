@@ -15,7 +15,7 @@ public class ProjectService {
     }
 
     public Project saveOrUpdate(Project project){
-        //logic
+        project.setIdentifier(project.getIdentifier().toUpperCase());
         return projectRepository.save(project);
     }
 }

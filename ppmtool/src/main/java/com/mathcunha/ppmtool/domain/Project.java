@@ -12,6 +12,7 @@ import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"identifier"}, name = "UK_project_identifier")})
 public class Project {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -20,7 +21,7 @@ public class Project {
     private String name;
     @NotBlank(message = "Project identifier is required")
     @Size(min = 4, max=5, message = "Please use 4 to 5 characters")
-    @Column(updatable = false, unique = true)
+    @Column(updatable = false)
     private String identifier;
     @NotBlank(message = "Project description is required")
     private String description;
