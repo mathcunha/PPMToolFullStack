@@ -16,12 +16,12 @@ public class PpmtoolApplication {
 		SpringApplication.run(PpmtoolApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public CommandLineRunner demoSpecialty(ProjectRepository repository) {
 		return (args) -> {
 			Project project = new Project();
 			project.setName("test");
 			repository.save(project);
 		};
-	}
+	}*/
 }
