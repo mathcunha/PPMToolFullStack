@@ -10,9 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/project")
@@ -58,5 +55,17 @@ public class ProjectController {
         }else{
             return new ResponseEntity<String>(String.format("Project with id %s was not found", identifier), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/{identifier}")
+    public ResponseEntity<?> updateProject(@PathVariable String identifier, @Valid @RequestBody Project project, BindingResult result){
+        project.setIdentifier(identifier);
+        Project persisted = projectService.update(project);
+
+        if(persisted == null){
+            return new ResponseEntity<String>(String.format("Project with id %s was not found", identifier), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<Project>(persisted, HttpStatus.OK);
     }
 }

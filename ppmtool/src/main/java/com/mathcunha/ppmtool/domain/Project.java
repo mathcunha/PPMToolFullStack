@@ -33,8 +33,19 @@ public class Project {
     private Date createdDate;
     @LastModifiedDate
     private Date updatedDate;
+    @Version
+    @Column(nullable = false)
+    private Long version;
 
     public Project() {
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getName() {
