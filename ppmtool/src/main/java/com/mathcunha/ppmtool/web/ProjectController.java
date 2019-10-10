@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,4 +35,28 @@ public class ProjectController {
         return new ResponseEntity<Project>(projectService.saveOrUpdate(project), HttpStatus.CREATED);
     }
 
+    @GetMapping("/{identifier}")
+    public ResponseEntity<Project> findByIdentifier(@PathVariable String identifier){
+        Project project = projectService.findByIdentifier(identifier);
+        if (project == null){
+            project = new Project();
+            project.setIdentifier(identifier);
+            return new ResponseEntity<Project>(project, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Project>(project, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Project>> findAll(){
+        return new ResponseEntity<Iterable<Project>>(projectService.findAll(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{identifier}")
+    public ResponseEntity<?> deleteProject(@PathVariable String identifier){
+        if (projectService.deleteByIdentifier(identifier)) {
+            return new ResponseEntity<String>(String.format("Project with id %s was deleted", identifier), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<String>(String.format("Project with id %s was not found", identifier), HttpStatus.NOT_FOUND);
+        }
+    }
 }
