@@ -91,66 +91,6 @@ describe("Projects API", function() {
     });
   });
 
-  describe("Consistence", function() {
-    it("get a Project", function(done) {
-      request.get(base_url + Project.identifier, function(
-        error,
-        response,
-        body
-      ) {
-        expect(response.statusCode).toBe(200);
-        expect(() => {
-          JSON.parse(body);
-        }).not.toThrow();
-        done();
-      });
-    });
-
-    it("update a Project", function(done) {
-      request.get(base_url + Project.identifier, function(
-        error,
-        response,
-        body
-      ) {
-        expect(response.statusCode).toBe(200);
-        expect(() => {
-          Project = Object.assign({}, JSON.parse(body));
-        }).not.toThrow();
-
-        Project.description = "Changing Jasmine Test";
-
-        request.post(
-          {
-            uri: base_url,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(Project)
-          },
-          function(error, response, body) {
-            expect(response.statusCode).toBe(201);
-            expect(body).toMatch("version");
-            expect(body).toMatch("Jasmine Test");
-          }
-        );
-
-        Project.description = "Updating without version";
-
-        request.post(
-          {
-            uri: base_url,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(Project)
-          },
-          function(error, response, body) {
-            expect(response.statusCode).toBe(500);
-            expect(body).toMatch("optimistic locking failed");
-          }
-        );
-
-        done();
-      });
-    });
-  });
-
   describe("GET /projects", function() {
     it("returns status code 200", function(done) {
       request.get(base_url, function(error, response, body) {
@@ -180,6 +120,96 @@ describe("Projects API", function() {
               JSON.stringify(Object.keys(projectRow).sort())
           ).toBeTruthy();
         });
+        done();
+      });
+    });
+  });
+
+  describe("Update a Project", function() {
+    it("load", function(done) {
+      request.get(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(200);
+        expect(() => {
+          JSON.parse(body);
+        }).not.toThrow();
+        done();
+      });
+    });
+
+    it("save", function(done) {
+      request.get(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(200);
+        expect(() => {
+          Project = Object.assign({}, JSON.parse(body));
+        }).not.toThrow();
+
+        Project.description = "Changing Jasmine Test";
+
+        request.post(
+          {
+            uri: base_url,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(Project)
+          },
+          function(error, response, body) {
+            expect(response.statusCode).toBe(201);
+            expect(body).toMatch("Jasmine Test");
+          }
+        );
+        done();
+      });
+    });
+  });
+
+  describe("Verify lock strategy", function() {
+    it("load", function(done) {
+      request.get(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(200);
+        expect(() => {
+          JSON.parse(body);
+        }).not.toThrow();
+        done();
+      });
+    });
+
+    it("save", function(done) {
+      request.get(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(200);
+        expect(() => {
+          Project = Object.assign({}, JSON.parse(body));
+        }).not.toThrow();
+
+        Project.description = "Updating without version";
+        Project.version = 0;
+
+        request.post(
+          {
+            uri: base_url,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(Project)
+          },
+          function(error, response, body) {
+            expect(response.statusCode).toBe(500);
+            expect(body).toMatch("optimistic locking failed");
+          }
+        );
+
         done();
       });
     });
