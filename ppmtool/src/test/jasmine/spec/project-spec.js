@@ -1,17 +1,11 @@
 var request = require("request");
 
-var base_url = "http://localhost:8090/api/project";
+var base_url = "http://localhost:8090/api/project/";
 
 let emptyProject = {
   name: "",
   identifier: "",
   description: ""
-};
-
-let Project = {
-  name: "Jasmine Test",
-  identifier: "JASM",
-  description: "Describing Jasmine Test"
 };
 
 let completeProject = {
@@ -24,6 +18,12 @@ let completeProject = {
   createdDate: "2019-10-11T16:32:05.000+0000",
   updatedDate: "2019-10-11T16:32:05.000+0000",
   version: 0
+};
+
+let Project = {
+  name: "Jasmine Test",
+  identifier: "JAS1",
+  description: "Jasmine test sample"
 };
 
 describe("Projects API", function() {
@@ -75,6 +75,80 @@ describe("Projects API", function() {
         }
       );
     });
+
+    it("successfully", function(done) {
+      request.post(
+        {
+          uri: base_url,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(Project)
+        },
+        function(error, response, body) {
+          expect(response.statusCode).toBe(201);
+          done();
+        }
+      );
+    });
+  });
+
+  describe("Consistence", function() {
+    it("get a Project", function(done) {
+      request.get(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(200);
+        expect(() => {
+          JSON.parse(body);
+        }).not.toThrow();
+        done();
+      });
+    });
+
+    it("update a Project", function(done) {
+      request.get(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(200);
+        expect(() => {
+          Project = Object.assign({}, JSON.parse(body));
+        }).not.toThrow();
+
+        Project.description = "Changing Jasmine Test";
+
+        request.post(
+          {
+            uri: base_url,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(Project)
+          },
+          function(error, response, body) {
+            expect(response.statusCode).toBe(201);
+            expect(body).toMatch("version");
+            expect(body).toMatch("Jasmine Test");
+          }
+        );
+
+        Project.description = "Updating without version";
+
+        request.post(
+          {
+            uri: base_url,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(Project)
+          },
+          function(error, response, body) {
+            expect(response.statusCode).toBe(500);
+            expect(body).toMatch("optimistic locking failed");
+          }
+        );
+
+        done();
+      });
+    });
   });
 
   describe("GET /projects", function() {
@@ -106,6 +180,30 @@ describe("Projects API", function() {
               JSON.stringify(Object.keys(projectRow).sort())
           ).toBeTruthy();
         });
+        done();
+      });
+    });
+  });
+
+  describe("delete projects", function() {
+    it("delete an existing Project", function(done) {
+      request.delete(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(200);
+        done();
+      });
+    });
+
+    it("delete an non existing Project", function(done) {
+      request.delete(base_url + Project.identifier, function(
+        error,
+        response,
+        body
+      ) {
+        expect(response.statusCode).toBe(404);
         done();
       });
     });
