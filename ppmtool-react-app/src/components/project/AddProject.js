@@ -13,6 +13,20 @@ class AddProject extends Component {
     };
 
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(e) {
+    e.preventDefault(e);
+    const Project = {
+      name: this.state.name,
+      identifier: this.state.identifier,
+      description: this.state.description,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate
+    };
+
+    console.log(Project);
   }
 
   onChange(e) {
@@ -30,7 +44,7 @@ class AddProject extends Component {
                   Create / Edit Project form
                 </h5>
                 <hr />
-                <form>
+                <form onSubmit={this.onSubmit}>
                   <div className="form-group">
                     <input
                       type="text"
