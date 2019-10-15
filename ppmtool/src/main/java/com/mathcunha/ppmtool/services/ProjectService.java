@@ -23,7 +23,7 @@ public class ProjectService {
 
     @Transactional(Transactional.TxType.REQUIRED)
     public Project saveOrUpdate(Project project){
-        log.info("saving");
+        log.info("saving "+project.getId());
         project.setIdentifier(project.getIdentifier().toUpperCase());
         return projectRepository.save(project);
     }
