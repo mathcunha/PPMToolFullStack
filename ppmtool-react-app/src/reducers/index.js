@@ -1,3 +1,6 @@
-import CombineReducers from "redux";
+import { combineReducers } from "redux";
+import errorReducer from "./errorReducer";
 
-export default CombineReducers({});
+export default combineReducers({
+  errors: errorReducer
+});
