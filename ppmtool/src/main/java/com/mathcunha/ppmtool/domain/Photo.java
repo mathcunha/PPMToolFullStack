@@ -8,7 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
 @Entity
-@NamedQueries(value = {@NamedQuery(name = "Photo.findPhotoCount", query = "select p.owner, count(p.id) from Photo p group by owner"), @NamedQuery(name = "Photo.findMaxPhotoCount", query = "select p.owner, count(p.id) as total from Photo p group by owner order by total limit 1")})
+@NamedQueries(value = {@NamedQuery(name = "Photo.findPhotoCount", query = "select new com.mathcunha.ppmtool.domain.PhotoStatistics(p.owner, count(p.id)) from Photo p group by owner")})
+@NamedNativeQueries(value = {@NamedNativeQuery(name = "Photo.findMaxPhotoCount", query = "select p.owner, count(p.id) as total from photo p group by owner order by total desc limit 1")})
 public class Photo {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -81,4 +82,6 @@ public class Photo {
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+
 }

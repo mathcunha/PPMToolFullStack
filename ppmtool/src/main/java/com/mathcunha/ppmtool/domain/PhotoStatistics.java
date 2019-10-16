@@ -16,4 +16,12 @@ public class PhotoStatistics {
     public Long getCnt() {
         return cnt;
     }
+
+    @Override
+    public String toString() {
+        return "PhotoStatistics{" +
+                "owner='" + owner + '\'' +
+                ", cnt=" + cnt +
+                '}';
+    }
 }
