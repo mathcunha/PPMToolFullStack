@@ -23,7 +23,7 @@ public class PpmtoolApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PpmtoolApplication.class, args);
 	}
-
+/*
 	@Bean
 	public CommandLineRunner demoPhoto(PhotoRepository repository) {
 		return (args) -> {
@@ -33,4 +33,5 @@ public class PpmtoolApplication {
 			log.info(stats.toString());
 		};
 	}
+	*/
 }
