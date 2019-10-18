@@ -3,7 +3,8 @@ import { GET_ERRORS, GET_PROJECTS } from "./types";
 
 export const createProject = (project, history) => async dispatch => {
   try {
-    const res = await axios.post("http://localhost:8090/api/project", project);
+    //const res = await axios.post("http://localhost:8090/api/project", project);
+    await axios.post("http://localhost:8090/api/project", project);
     history.push("/dashboard");
   } catch (error) {
     dispatch({
