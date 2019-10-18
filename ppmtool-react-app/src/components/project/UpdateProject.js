@@ -145,7 +145,22 @@ class UpdateProject extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-
+                <h6>Version</h6>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.version
+                    })}
+                    placeholder="Unique Project ID"
+                    name="version"
+                    value={this.state.version}
+                    disabled
+                  />
+                  {errors.version && (
+                    <div className="invalid-feedback">{errors.version}</div>
+                  )}
+                </div>
                 <input
                   type="submit"
                   className="btn btn-primary btn-block mt-4"

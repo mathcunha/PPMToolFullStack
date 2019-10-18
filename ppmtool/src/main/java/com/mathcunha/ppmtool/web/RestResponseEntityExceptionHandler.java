@@ -1,5 +1,6 @@
 package com.mathcunha.ppmtool.web;
 
+import org.hibernate.StaleObjectStateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         matcher.find();
         String constraint = matcher.group("constraint");
         errorMap.put(constraint.split("_")[2], constraint);
+        return new ResponseEntity<Map<String, String>> (errorMap, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {StaleObjectStateException.class})
+    protected ResponseEntity<Map<String, String>> optimisticLockingFailureException(RuntimeException ex, WebRequest request) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("version", "this info was update by other action. Please refresh");
         return new ResponseEntity<Map<String, String>> (errorMap, HttpStatus.BAD_REQUEST);
     }
 
