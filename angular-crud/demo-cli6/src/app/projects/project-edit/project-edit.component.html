@@ -1,0 +1,65 @@
+<div class="card">
+  <div class="header">
+    <h1 class="title">Project Detail</h1>
+  </div>
+  <div class="content">
+    <p *ngIf="errors">{{ errors }}</p>
+
+    <form *ngIf="project">
+      <div class="form-group">
+        <label>Id:</label>
+        {{ project.id || "n/a" }}
+      </div>
+
+      <div class="form-group">
+        <label>Identifier:</label>
+        <input
+          [(ngModel)]="project.identifier"
+          name="identifier"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Name:</label>
+        <input [(ngModel)]="project.name" name="name" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label>Description:</label>
+        <input
+          [(ngModel)]="project.description"
+          name="description"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Start Date:</label>
+        <input
+          [(ngModel)]="project.startDate"
+          name="startDate"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>End Date:</label>
+        <input
+          [(ngModel)]="project.endDate"
+          name="endDate"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Version:</label>
+        {{ project.version || "n/a" }}
+      </div>
+
+      <div class="form-group">
+        <button (click)="save()" class="btn btn-default">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

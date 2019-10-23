@@ -43,7 +43,11 @@ public class ProjectService {
     }
 
     public Project findByIdentifier(String id){
-        return projectRepository.findByIdentifier(id);
+        Project pro = projectRepository.findByIdentifier(id);
+        if(pro == null){
+            return projectRepository.findById(Long.parseLong(id)).orElse(null);
+        }
+        return null;
     }
 
     public Iterable<Project> findAll(){

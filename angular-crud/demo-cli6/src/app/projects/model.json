@@ -1,0 +1,55 @@
+{
+  "title": "Project",
+  "entity": "project",
+  "api": {
+    "url": "http://localhost:8090/api/project"
+  },
+  "filter": ["identifier"],
+  "fields": [
+    {
+      "name": "id",
+      "isId": true,
+      "type": "number",
+      "label": "Id",
+      "readonly": true,
+      "control": "text"
+    },
+    {
+      "name": "identifier",
+      "type": "string",
+      "label": "Identifier",
+      "control": "text"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "label": "Name",
+      "control": "text"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "label": "Description",
+      "control": "text"
+    },
+    {
+      "name": "startDate",
+      "type": "string",
+      "control": "date",
+      "label": "Start Date"
+    },
+    {
+      "name": "endDate",
+      "type": "string",
+      "control": "date",
+      "label": "End Date"
+    },
+    {
+      "name": "version",
+      "type": "number",
+      "label": "Version",
+      "readonly": true,
+      "control": "text"
+    }
+  ]
+}

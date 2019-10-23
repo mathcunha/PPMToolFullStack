@@ -1,0 +1,60 @@
+<div class="card">
+    
+      <div class="header">
+        <h2 class="title">Project</h2>
+      </div>
+      <div class="content">
+    
+        <form #f="ngForm">
+
+          <div class="form-group">
+            <label>Identifier:</label>
+            <input [(ngModel)]="filter.identifier" name="identifier" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <button (click)="search()" [disabled]="!f?.valid" class="btn btn-default">
+              Search
+            </button>
+            <a [routerLink]="['../project','new']" class="btn btn-default">
+                New
+            </a>
+  
+          </div>
+          
+        </form>
+    
+      </div>
+    </div>
+    
+    <div class="card" *ngIf="projectList.length > 0">
+    
+      <table class="table table-contensed" >
+        <thead>
+        <tr>            
+            <th>Id</th>            
+            <th>Identifier</th>            
+            <th>Name</th>            
+            <th>Description</th>            
+            <th>Start Date</th>            
+            <th>End Date</th>            
+            <th>Version</th>
+        </tr>
+        </thead>
+        <tr *ngFor="let item of projectList" [class.active]="item === selectedProject">
+            <td>{{item.id}}</td>
+            <td>{{item.identifier}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.description}}</td>
+            <td>{{item.startDate | date}}</td>
+            <td>{{item.endDate | date}}</td>
+            <td>{{item.version}}</td>
+            <td>
+                
+                <a [routerLink]="['../project', item.id ]">Details</a> |           
+                <a (click)="select(item)">Select</a>
+            </td>
+        </tr>
+      </table>
+    
+    </div>
