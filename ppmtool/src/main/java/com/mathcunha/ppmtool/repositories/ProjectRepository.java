@@ -10,7 +10,7 @@ import javax.validation.constraints.Null;
 @Repository
 public interface ProjectRepository extends CrudRepository<Project, Long> {
 
-    Iterable<Project> findByDescriptionLike(String description);
+    Iterable<Project> findByDescriptionContaining(String description);
 
     @Null
     Project findByIdentifier(String identifier);

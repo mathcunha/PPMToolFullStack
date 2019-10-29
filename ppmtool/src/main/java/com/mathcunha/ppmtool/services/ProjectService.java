@@ -51,7 +51,7 @@ public class ProjectService {
     }
 
     public Iterable<Project> findByDescription(String description){
-        return projectRepository.findByDescriptionLike(description);
+        return projectRepository.findByDescriptionContaining(description);
     }
 
     public Iterable<Project> findAll(){
