@@ -4,7 +4,7 @@
   "api": {
     "url": "http://localhost:8090/api/project"
   },
-  "filter": ["identifier"],
+  "filter": ["description"],
   "fields": [
     {
       "name": "id",

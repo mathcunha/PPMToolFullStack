@@ -5,10 +5,10 @@
   <div class="content">
     <form #f="ngForm">
       <div class="form-group">
-        <label>Identifier:</label>
+        <label>Description:</label>
         <input
-          [(ngModel)]="filter.identifier"
-          name="identifier"
+          [(ngModel)]="filter.description"
+          name="description"
           class="form-control"
         />
       </div>
@@ -53,9 +53,7 @@
       <td>{{ item.startDate | date }}</td>
       <td>{{ item.endDate | date }}</td>
       <td>{{ item.version }}</td>
-      <td>
-        <a [routerLink]="['../project', item.id]">Details</a>
-      </td>
+      <td><a [routerLink]="['../project', item.id]">Details</a></td>
     </tr>
   </table>
 </div>

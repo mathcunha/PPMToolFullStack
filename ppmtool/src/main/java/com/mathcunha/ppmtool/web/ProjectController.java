@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/project")
@@ -45,8 +47,12 @@ public class ProjectController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Project>> findAll(){
-        return new ResponseEntity<Iterable<Project>>(projectService.findAll(), HttpStatus.OK);
+    public ResponseEntity<Iterable<Project>> findAll(@RequestParam(name = "description") String desc){
+        if(desc == null || desc.trim().length() == 0) {
+            return new ResponseEntity<Iterable<Project>>(projectService.findAll(), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<Iterable<Project>>(projectService.findByDescription(desc), HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/{identifier}")

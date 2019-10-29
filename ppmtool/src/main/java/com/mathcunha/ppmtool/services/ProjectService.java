@@ -50,6 +50,10 @@ public class ProjectService {
         return null;
     }
 
+    public Iterable<Project> findByDescription(String description){
+        return projectRepository.findByDescriptionLike(description);
+    }
+
     public Iterable<Project> findAll(){
         return projectRepository.findAll();
     }

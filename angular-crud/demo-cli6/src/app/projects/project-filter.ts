@@ -1,3 +1,3 @@
 export class ProjectFilter {
-    identifier: string = '';
+    description: string = '';
 }
