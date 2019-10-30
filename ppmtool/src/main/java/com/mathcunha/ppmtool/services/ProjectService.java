@@ -47,7 +47,7 @@ public class ProjectService {
         if(pro == null){
             return projectRepository.findById(Long.parseLong(id)).orElse(null);
         }
-        return null;
+        return pro;
     }
 
     public Iterable<Project> findByDescription(String description){

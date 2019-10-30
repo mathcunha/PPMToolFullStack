@@ -93,14 +93,14 @@ describe("Projects API", function() {
 
   describe("GET /projects", function() {
     it("returns status code 200", function(done) {
-      request.get(base_url, function(error, response, body) {
+      request.get(base_url + "?description", function(error, response, body) {
         expect(response.statusCode).toBe(200);
         done();
       });
     });
 
     it("API Response should be valid array of json objects 1", function(done) {
-      request.get(base_url, function(error, response, body) {
+      request.get(base_url + "?description", function(error, response, body) {
         // console.log(typeof body);
         //  body = 'Hello World';
         expect(() => {
@@ -112,7 +112,7 @@ describe("Projects API", function() {
     });
 
     it("API Response should be valid array of project objects 2", function(done) {
-      request.get(base_url, function(error, response, body) {
+      request.get(base_url + "?description", function(error, response, body) {
         let projects = JSON.parse(body);
         const projectRows = projects.map(projectRow => {
           expect(
@@ -205,8 +205,8 @@ describe("Projects API", function() {
             body: JSON.stringify(Project)
           },
           function(error, response, body) {
-            expect(response.statusCode).toBe(500);
-            expect(body).toMatch("optimistic locking failed");
+            expect(response.statusCode).toBe(400);
+            expect(body).toMatch("Please refresh");
           }
         );
 
@@ -216,6 +216,13 @@ describe("Projects API", function() {
   });
 
   describe("delete projects", function() {
+    it("delete an non existing Project", function(done) {
+      request.delete(base_url + "111111", function(error, response, body) {
+        expect(response.statusCode).toBe(404);
+        done();
+      });
+    });
+
     it("delete an existing Project", function(done) {
       request.delete(base_url + Project.identifier, function(
         error,
@@ -223,17 +230,6 @@ describe("Projects API", function() {
         body
       ) {
         expect(response.statusCode).toBe(200);
-        done();
-      });
-    });
-
-    it("delete an non existing Project", function(done) {
-      request.delete(base_url + Project.identifier, function(
-        error,
-        response,
-        body
-      ) {
-        expect(response.statusCode).toBe(404);
         done();
       });
     });
