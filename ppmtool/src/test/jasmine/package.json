@@ -2,6 +2,7 @@
   "name": "jasmine-test-app",
   "version": "0.0.1",
   "dependencies": {
+    "jasmine-json-test-reporter": "^1.0.0-beta",
     "request": "^2.88.0"
   }
 }

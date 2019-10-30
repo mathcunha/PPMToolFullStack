@@ -1,4 +1,11 @@
 var request = require("request");
+var JSONReporter = require("jasmine-json-test-reporter");
+jasmine.getEnv().addReporter(
+  new JSONReporter({
+    file: "project-test-results.json",
+    beautify: true
+  })
+);
 
 var base_url = "http://localhost:8090/api/project/";
 
@@ -91,40 +98,6 @@ describe("Projects API", function() {
     });
   });
 
-  describe("GET /projects", function() {
-    it("returns status code 200", function(done) {
-      request.get(base_url + "?description", function(error, response, body) {
-        expect(response.statusCode).toBe(200);
-        done();
-      });
-    });
-
-    it("API Response should be valid array of json objects 1", function(done) {
-      request.get(base_url + "?description", function(error, response, body) {
-        // console.log(typeof body);
-        //  body = 'Hello World';
-        expect(() => {
-          JSON.parse(body);
-        }).not.toThrow();
-
-        done();
-      });
-    });
-
-    it("API Response should be valid array of project objects 2", function(done) {
-      request.get(base_url + "?description", function(error, response, body) {
-        let projects = JSON.parse(body);
-        const projectRows = projects.map(projectRow => {
-          expect(
-            JSON.stringify(Object.keys(completeProject).sort()) ===
-              JSON.stringify(Object.keys(projectRow).sort())
-          ).toBeTruthy();
-        });
-        done();
-      });
-    });
-  });
-
   describe("Update a Project", function() {
     it("load", function(done) {
       request.get(base_url + Project.identifier, function(
@@ -164,6 +137,40 @@ describe("Projects API", function() {
             expect(body).toMatch("Jasmine Test");
           }
         );
+        done();
+      });
+    });
+  });
+
+  describe("GET /projects", function() {
+    it("returns status code 200", function(done) {
+      request.get(base_url + "?description", function(error, response, body) {
+        expect(response.statusCode).toBe(200);
+        done();
+      });
+    });
+
+    it("API Response should be valid array of json objects 1", function(done) {
+      request.get(base_url + "?description", function(error, response, body) {
+        // console.log(typeof body);
+        //  body = 'Hello World';
+        expect(() => {
+          JSON.parse(body);
+        }).not.toThrow();
+
+        done();
+      });
+    });
+
+    it("API Response should be valid array of project objects 2", function(done) {
+      request.get(base_url + "?description", function(error, response, body) {
+        let projects = JSON.parse(body);
+        const projectRows = projects.map(projectRow => {
+          expect(
+            JSON.stringify(Object.keys(completeProject).sort()) ===
+              JSON.stringify(Object.keys(projectRow).sort())
+          ).toBeTruthy();
+        });
         done();
       });
     });
@@ -209,7 +216,6 @@ describe("Projects API", function() {
             expect(body).toMatch("Please refresh");
           }
         );
-
         done();
       });
     });
