@@ -1,6 +1,8 @@
 package com.mathcunha.ppmtool.services;
 
+import com.mathcunha.ppmtool.domain.Backlog;
 import com.mathcunha.ppmtool.domain.Project;
+import com.mathcunha.ppmtool.repositories.BacklogRepository;
 import com.mathcunha.ppmtool.repositories.ProjectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +17,29 @@ public class ProjectService {
     private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
 
     private final ProjectRepository projectRepository;
+    private final BacklogRepository backlogRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, BacklogRepository backlogRepository) {
         this.projectRepository = projectRepository;
+        this.backlogRepository = backlogRepository;
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
     public Project saveOrUpdate(Project project){
         log.info("saving "+project.getId());
+        Boolean isNew = project.getId() == null;
+
         project.setIdentifier(project.getIdentifier().toUpperCase());
-        return projectRepository.save(project);
+        Project persistedProject =  projectRepository.save(project);
+
+        if(isNew){
+            Backlog backlog = new Backlog(persistedProject);
+            log.info(backlog.toString());
+            backlogRepository.save(backlog);
+        }
+
+        return persistedProject;
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
@@ -53,6 +67,9 @@ public class ProjectService {
     public Boolean deleteByIdentifier(String id){
         Project project = findByIdentifier(id);
         if (project != null) {
+            Backlog backlog = new Backlog();
+            backlog.setId(project.getId());
+            backlogRepository.delete(backlog);
             projectRepository.delete(project);
             return true;
         }
