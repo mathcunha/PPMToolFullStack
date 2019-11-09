@@ -59,4 +59,13 @@ public class TaskService {
     public Task findBySequence(String sequence){
         return taskRepository.findBySequence(sequence);
     }
+
+    public Boolean deleteBySequence(String sequence){
+        Task task = findBySequence(sequence);
+        if (task != null) {
+            taskRepository.delete(task);
+            return true;
+        }
+        return false;
+    }
 }

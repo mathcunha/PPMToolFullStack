@@ -27,7 +27,7 @@ public class BacklogController {
     }
 
     @PostMapping("/{identifier}")
-    public ResponseEntity<?> addTask(@Valid @RequestBody Task task, @PathVariable String identifier, BindingResult result){
+    public ResponseEntity<?> addTask(@Valid @RequestBody Task task, BindingResult result, @PathVariable String identifier){
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
 
@@ -56,5 +56,29 @@ public class BacklogController {
             return new ResponseEntity<Map<String, String>>(errors, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<Task>(task, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{identifier}/{sequence}")
+    public ResponseEntity<?> addTask(@Valid @RequestBody Task task, BindingResult result, @PathVariable String identifier, @PathVariable String sequence){
+        ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        Task createdTask = taskService.addTask(identifier, task);
+
+        if(createdTask == null) {
+            Map<String, String> errors = new HashMap<>(1);
+            errors.put("ProjectNotFound", String.format("Project with id %s was not found", identifier));
+            return new ResponseEntity<Map<String, String>>(errors, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Task>(createdTask, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{identifier}/{sequence}")
+    public ResponseEntity<?> deleteTask(@PathVariable String identifier, @PathVariable String sequence){
+        if (taskService.deleteBySequence(sequence)) {
+            return new ResponseEntity<String>(String.format("Task with sequence %s was deleted", sequence), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<String>(String.format("Task with sequence %s was not found", sequence), HttpStatus.NOT_FOUND);
+        }
     }
 }
